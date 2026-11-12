@@ -538,7 +538,7 @@ occ auditlogs --component hello --release-line next
 # The audit record for a request seen in an access log
 occ auditlogs --since 30d --request-id 4f8c2e1a-...
 
-# Select audit attributes using their JSON names
+# Select audit JSON fields; . selects nested fields such as actor.id
 occ auditlogs -o custom-columns=event_time,result,actor.id
 ```
 
@@ -1097,8 +1097,8 @@ occ cop logs default -l openchoreo.dev/plane=dataplane,openchoreo.dev/plane-id=e
 # Print selected platform log attributes
 occ clusterobservabilityplane logs default -o custom-columns=timestamp,level,podName,log
 
-# Select a label whose JSON key contains a period
-occ clusterobservabilityplane logs default -o 'custom-columns=labels.openchoreo\.dev/plane,log'
+# Escape literal periods with \.; single or double quotes preserve the escape
+occ clusterobservabilityplane logs default -o "custom-columns=labels.openchoreo\.dev/plane,log"
 ```
 
 ---
@@ -1579,7 +1579,7 @@ occ component logs my-app --all-release-lines
 # Print each log entry as JSON, including metadata
 occ component logs my-app -o json
 
-# Print selected log attributes in order
+# Print selected fields; . selects nested fields such as metadata.podName
 occ component logs my-app -o custom-columns=timestamp,level,metadata.podName,log
 ```
 
@@ -2502,6 +2502,9 @@ occ observabilityplane logs primary-observabilityplane --namespace acme-corp -o 
 
 # Print selected platform log attributes
 occ observabilityplane logs primary-observabilityplane --namespace acme-corp -o custom-columns=timestamp,level,podName,log
+
+# Escape literal periods with \.; single or double quotes preserve the escape
+occ observabilityplane logs primary-observabilityplane --namespace acme-corp -o "custom-columns=labels.openchoreo\.dev/plane,log"
 ```
 
 ---
